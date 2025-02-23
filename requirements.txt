@@ -7,3 +7,4 @@ streamlit-tags
 supabase
 streamlit
 crawl4ai
+playwright
