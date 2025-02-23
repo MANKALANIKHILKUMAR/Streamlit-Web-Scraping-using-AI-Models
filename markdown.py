@@ -14,7 +14,7 @@ async def get_fit_markdown_async(url: str) -> str:
     (Reverting from the 'fit' approach back to normal.)
     """
 
-    async with AsyncWebCrawler() as crawler:
+    async with AsyncWebCrawler(headless=True) as crawler:
         result = await crawler.arun(url=url)
         if result.success:
             return result.markdown
