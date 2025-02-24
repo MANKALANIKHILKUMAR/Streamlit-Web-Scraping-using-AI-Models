@@ -7,4 +7,4 @@ streamlit-tags
 supabase
 streamlit
 crawl4ai
-playwright
+playwright=1.50.0
