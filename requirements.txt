@@ -8,3 +8,4 @@ supabase
 streamlit
 crawl4ai
 playwright
+playwright -deps
