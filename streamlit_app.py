@@ -14,11 +14,28 @@ from markdown import fetch_and_store_markdowns
 from assets import MODELS_USED
 from api_management import get_supabase_client
 
+
+
+
 import os
 
 # Install Playwright browsers and system dependencies
 os.system("playwright install")
 os.system("playwright install-deps")
+
+
+from playwright.async_api import async_playwright
+
+async def debug_playwright():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        print(f"Browser path: {browser.executable_path}")
+        await browser.close()
+
+# Call the debug function
+asyncio.run(debug_playwright())
+
+
 
 # Only use WindowsProactorEventLoopPolicy on Windows
 if sys.platform.startswith("win"):
