@@ -18,13 +18,9 @@ from api_management import get_supabase_client
 import os
 import subprocess
 
-Install Playwright browsers and dependencies
+# Install Playwright browsers and dependencies
 subprocess.run(["playwright", "install"])
 subprocess.run(["playwright", "install-deps"])
-
-
-
-
 
 
 
