@@ -1,9 +1,13 @@
-FROM python:3.12-slim
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    unzip \
+# Set the working directory
+WORKDIR /app
+
+# Install system dependencies required for Playwright
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
     libnss3 \
     libnspr4 \
     libatk1.0-0 \
@@ -16,22 +20,25 @@ RUN apt-get update && apt-get install -y \
     libxfixes3 \
     libxrandr2 \
     libgbm1 \
+    libpango-1.0-0 \
+    libcairo2 \
     libasound2 \
     libatspi2.0-0 \
     libwayland-client0 \
-    libwayland-server0 \
-    libxshmfence1
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Playwright and its browsers
+RUN pip install playwright && \
+    playwright install
 
-# Install Playwright browsers
-RUN playwright install
-RUN playwright install-deps
-
-# Copy app files
+# Copy the current directory contents into the container
 COPY . .
 
-# Run the app
+# Install Python dependencies
+RUN pip install -r requirements.txt
+
+# Expose the port the app runs on
+EXPOSE 8501
+
+# Run the Streamlit app
 CMD ["streamlit", "run", "streamlit_app.py"]
