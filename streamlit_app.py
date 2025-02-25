@@ -24,16 +24,16 @@ os.system("playwright install")
 os.system("playwright install-deps")
 
 
-from playwright.async_api import async_playwright
+# from playwright.async_api import async_playwright
 
-async def debug_playwright():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        print(f"Browser path: {browser.executable_path}")
-        await browser.close()
+# async def debug_playwright():
+#     async with async_playwright() as p:
+#         browser = await p.chromium.launch()
+#         print(f"Browser path: {browser.executable_path}")
+#         await browser.close()
 
-# Call the debug function
-asyncio.run(debug_playwright())
+# # Call the debug function
+# asyncio.run(debug_playwright())
 
 
 
