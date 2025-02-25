@@ -23,11 +23,11 @@ subprocess.run(["playwright", "install"])
 subprocess.run(["playwright", "install-deps"])
 
 
-# import os
+import os
 
-# # Install Playwright browsers and system dependencies
-# os.system("playwright install")
-# os.system("playwright install-deps")
+# Install Playwright browsers and system dependencies
+os.system("playwright install")
+os.system("playwright install-deps")
 
 
 # from playwright.async_api import async_playwright
