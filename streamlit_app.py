@@ -23,6 +23,17 @@ subprocess.run(["playwright", "install"])
 subprocess.run(["playwright", "install-deps"])
 
 
+
+
+
+# Debug: Check if Playwright is installed
+try:
+    subprocess.run(["playwright", "--version"], check=True)
+    st.success("Playwright is installed and working!")
+except Exception as e:
+    st.error(f"Playwright is not installed or not working: {e}")
+
+
 import os
 
 # Install Playwright browsers and system dependencies
