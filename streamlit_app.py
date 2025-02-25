@@ -18,39 +18,33 @@ from api_management import get_supabase_client
 import os
 import subprocess
 
-# Install Playwright browsers and dependencies
-# subprocess.run(["playwright", "install"])
-# subprocess.run(["playwright", "install-deps"])
+Install Playwright browsers and dependencies
+subprocess.run(["playwright", "install"])
+subprocess.run(["playwright", "install-deps"])
 
 
 
 
 
-# Debug: Check if Playwright is installed
-try:
-    subprocess.run(["playwright", "--version"], check=True)
-    st.success("Playwright is installed and working!")
-except Exception as e:
-    st.error(f"Playwright is not installed or not working: {e}")
 
 
-import os
+# import os
 
-# Install Playwright browsers and system dependencies
-os.system("playwright install")
-os.system("playwright install-deps")
+# # Install Playwright browsers and system dependencies
+# os.system("playwright install")
+# os.system("playwright install-deps")
 
 
-# from playwright.async_api import async_playwright
+from playwright.async_api import async_playwright
 
-# async def debug_playwright():
-#     async with async_playwright() as p:
-#         browser = await p.chromium.launch()
-#         print(f"Browser path: {browser.executable_path}")
-#         await browser.close()
+async def debug_playwright():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        print(f"Browser path: {browser.executable_path}")
+        await browser.close()
 
-# # Call the debug function
-# asyncio.run(debug_playwright())
+# Call the debug function
+asyncio.run(debug_playwright())
 
 
 
