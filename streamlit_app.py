@@ -20,27 +20,7 @@ import subprocess
 
 # Install Playwright browsers and dependencies
 subprocess.run(["playwright", "install"])
-subprocess.run(["playwright", "install-deps"])
-
-
-
-# import os
-
-# # Install Playwright browsers and system dependencies
-# os.system("playwright install")
-# os.system("playwright install-deps")
-
-
-# from playwright.async_api import async_playwright
-
-# async def debug_playwright():
-#     async with async_playwright() as p:
-#         browser = await p.chromium.launch()
-#         print(f"Browser path: {browser.executable_path}")
-#         await browser.close()
-
-# # Call the debug function
-# asyncio.run(debug_playwright())
+# subprocess.run(["playwright", "install-deps"])
 
 
 
@@ -167,6 +147,20 @@ with st.sidebar.container():
             st.write("No URLs added yet.")
 
 st.sidebar.markdown("---")
+
+
+
+from playwright.async_api import async_playwright
+
+async def get_fit_markdown_async(url):
+    async with async_playwright() as p:
+        # Use Chromium instead of WebKit
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url)
+        content = await page.content()
+        await browser.close()
+        return content
 
 
 # Fields to extract
