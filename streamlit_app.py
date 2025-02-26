@@ -15,7 +15,10 @@ from assets import MODELS_USED
 from api_management import get_supabase_client
 
 
-import os
+
+# import os
+# os.system("playwright install")
+
 import subprocess
 
 # Install Playwright browsers and dependencies
