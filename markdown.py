@@ -8,18 +8,32 @@ from crawl4ai import AsyncWebCrawler
 
 supabase = get_supabase_client()
 
-async def get_fit_markdown_async(url: str) -> str:
-    """
-    Async function using crawl4ai's AsyncWebCrawler to produce the regular raw markdown.
-    (Reverting from the 'fit' approach back to normal.)
-    """
+# async def get_fit_markdown_async(url: str) -> str:
+#     """
+#     Async function using crawl4ai's AsyncWebCrawler to produce the regular raw markdown.
+#     (Reverting from the 'fit' approach back to normal.)
+#     """
 
-    async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun(url=url)
-        if result.success:
-            return result.markdown
-        else:
-            return ""
+#     async with AsyncWebCrawler() as crawler:
+#         result = await crawler.arun(url=url)
+#         if result.success:
+#             return result.markdown
+#         else:
+#             return ""
+
+
+
+from playwright.async_api import async_playwright
+
+async def get_fit_markdown_async(url : str):
+    async with async_playwright() as p:
+        # Use Chromium instead of WebKit
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url)
+        content = await page.content()
+        await browser.close()
+        return content
 
 
 def fetch_fit_markdown(url: str) -> str:
