@@ -20,7 +20,7 @@ import subprocess
 
 # Install Playwright browsers and dependencies
 subprocess.run(["playwright", "install"])
-sudo playwright install-deps  
+ 
 # subprocess.run(["playwright", "install-deps"])
 
 
