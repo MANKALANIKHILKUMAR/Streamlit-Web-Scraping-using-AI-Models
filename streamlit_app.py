@@ -830,15 +830,72 @@ if st.session_state['scraping_state'] == 'completed' and st.session_state['resul
 
             # Check if "pagination_data" exists
             if "pagination_data" in item:
-                pag_obj = item["
+                pag_obj = item["pagination_data"]
 
+                # Convert if it's a Pydantic model
+                if hasattr(pag_obj, "dict"):
+                    pag_obj = pag_obj.model_dump()
+                elif isinstance(pag_obj, str):
+                    # If it's a JSON string, attempt to parse
+                    try:
+                        pag_obj = json.loads(pag_obj)
+                    except json.JSONDecodeError:
+                        # Fallback: keep it as raw string
+                        pass
 
+                # Now we have pag_obj as a dict, list, or string
+                item["pagination_data"] = pag_obj
 
+            # Process the extracted pagination_data
+            pd_obj = item["pagination_data"]
 
+            # If it contains "page_urls" and it's a list, extract individual rows
+            if isinstance(pd_obj, dict) and "page_urls" in pd_obj and isinstance(pd_obj["page_urls"], list):
+                for page_url in pd_obj["page_urls"]:
+                    row_dict = {"page_url": page_url}
+                    # Optionally, attach "unique_name" or other top-level fields
+                    # row_dict["unique_name"] = item.get("unique_name", "")
+                    all_page_rows.append(row_dict)
+            else:
+                # Otherwise, store the entire item as a single row
+                row_dict = dict(item)  # Shallow copy
+                all_page_rows.append(row_dict)
 
+        # Create DataFrame and display it
+        if not all_page_rows:
+            st.warning("No page URLs found.")
+        else:
+            pagination_df = pd.DataFrame(all_page_rows)
+            st.markdown("---")
+            st.subheader("Pagination Information")
+            st.write("**Page URLs:**")
+            st.dataframe(pagination_df, column_config={"page_url": st.column_config.LinkColumn("Page URL")}, use_container_width=True)
+        
+        if "in_tokens_p" in st.session_state:
+            # Display token usage and cost using metrics
+            st.sidebar.markdown("---")
+            st.sidebar.markdown("### Pagination Details")
+            st.sidebar.markdown(f"**Number of Page URLs:** {len(all_page_rows)}")
+            st.sidebar.markdown("#### Pagination Token Usage")
+            st.sidebar.markdown(f"*Input Tokens:* {st.session_state['in_tokens_p']}")
+            st.sidebar.markdown(f"*Output Tokens:* {st.session_state['out_tokens_p']}")
+            st.sidebar.markdown(f"**Total Cost:** :blue-background[**${st.session_state['cost_p']:.4f}**]")
+        # Download pagination URLs
+        st.subheader("Download Pagination URLs")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.download_button("Download Pagination CSV", data=pagination_df.to_csv(index=False), file_name="pagination_urls.csv")
+        with col2:
+            st.download_button("Download Pagination JSON", data=json.dumps(all_page_rows, indent=4), file_name="pagination_urls.json")
+    # Reset scraping state
+    if st.sidebar.button("Clear Results"):
+        st.session_state['scraping_state'] = 'idle'
+        st.session_state['results'] = None
 
-
-
-
-
-
+   # If both scraping and pagination were performed, show totals under the pagination table
+    if show_tags and pagination_info:
+        st.markdown("---")
+        st.markdown("### Total Counts and Cost (Including Pagination)")
+        st.markdown(f"**Total Input Tokens:** {total_input_tokens}")
+        st.markdown(f"**Total Output Tokens:** {total_output_tokens}")
+        st.markdown(f"**Total Combined Cost:** :rainbow-background[**${total_cost:.4f}**]")
